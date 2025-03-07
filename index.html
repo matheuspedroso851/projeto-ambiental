@@ -15,36 +15,43 @@
     }
 
     body {
-      background-color: #f4f4f4;
-      color: #333;
+      background-color: #e9f7e6; /* Cor suave de fundo, lembrando a natureza */
+      color: #3e3e3e; /* Texto em um tom neutro */
       text-align: center;
       padding: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding-top: 60px; /* Espaço para não cobrir o conteúdo com a navbar fixa */
     }
 
     .title {
-      color: #0056b3;
+      color: #2e8b57; /* Verde escuro, remetendo à vegetação */
       font-size: 2.5em;
       margin-bottom: 10px;
-      background-color: #f4f4f4;
+      background-color: #e9f7e6; /* Cor de fundo suave */
       padding: 20px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     h2 {
-      color: #003366;
+      color: #2d6a4f; /* Verde mais escuro, em tom de floresta */
       font-size: 1.5em;
       margin-bottom: 10px;
     }
 
+    /* Barra de navegação fixa */
     nav ul {
       list-style: none;
       display: flex;
       justify-content: center;
-      background: #003366;
+      background: #2e8b57; /* Verde de folhas e plantas */
       padding: 10px;
       border-radius: 8px;
-      margin-bottom: 30px;
+      margin: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
     }
 
     nav ul li {
@@ -73,7 +80,7 @@
 
     /* Estilização dos quadros */
     .quadro, .descartar-item, .impacto-item {
-      background: #003366;
+      background: #4caf50; /* Verde mais claro, cor associada à natureza */
       color: white;
       padding: 20px;
       border-radius: 10px;
@@ -91,12 +98,12 @@
     .quadro h2, .descartar-item h2, .impacto-item h3 {
       font-size: 1.3em;
       margin-bottom: 10px;
-      color: #ddd;
+      color: #fff8e1; /* Tom mais claro para destaque */
     }
 
     .quadro p, .descartar-item p, .impacto-item p {
       font-size: 1em;
-      color: #ddd;
+      color: #f1f1f1; /* Texto mais claro para fácil leitura */
       opacity: 0;
       transition: opacity 0.3s ease-in-out;
       position: absolute;
@@ -119,14 +126,14 @@
     .section-title {
       font-size: 2em;
       margin-bottom: 20px;
-      color: #003366;
+      color: #2d6a4f; /* Cor de título mais forte, alinhado com o tema */
     }
 
     /* Mapa interativo */
     .map-container {
       width: 100%;
       height: 400px;
-      background-color: #e0e0e0;
+      background-color: #dcedc8; /* Cor mais clara, para um fundo que lembre o ar livre */
       margin: 30px 0;
     }
 
@@ -136,12 +143,14 @@
   <div class="title"><p>ReciclaFácil</p></div>
   <h2>No EcoPontos, nossa missão é ajudar você a encontrar os locais ideais para descartar seus resíduos de forma correta e consciente.</h2>
 
-  <!-- Barra de navegação -->
+  <!-- Barra de navegação fixa -->
   <nav>
     <ul>
+      <li><a href="index.html">Início</a></li>
       <li><a href="mapa_interativo.html">Mapa Interativo</a></li>
-      <li><a href="tipos_de_residuos.html">Tipos de Resíduos</a></li>
-      <li><a href="impactos_ambientais.html">Impactos Ambientais</a></li>
+      <li><a href="#tipos-de-residuos">Tipos de Resíduos</a></li>
+      <li><a href="#onde-des-residuos">Impactos Ambientais</a></li>
+      <li><a href="#inpact-ambinte">Dicas e Informações</a></li>
       <li><a href="dicas_informacoes.html">Dicas e Informações</a></li>
     </ul>
   </nav>
@@ -152,8 +161,10 @@
   </div>
 
   <!-- Tipos de Resíduos -->
-  <div class="section-title">Tipos de Resíduos</div>
-  
+  <div id="tipos-de-residuos">
+    <div class="section-title">Tipos de Resíduos</div>
+  </div>
+
   <div class="container">
     <div class="quadro">
       <h2>Resíduos Sólidos Urbanos (RSU)</h2>
@@ -190,8 +201,10 @@
   </div>
 
   <!-- Onde descartar os resíduos -->
-  <div class="section-title">Onde Descartar os Resíduos</div>
-  
+  <div id="onde-des-residuos">
+    <div class="section-title">Onde Descartar os Resíduos</div>
+  </div>
+
   <div class="container">
     <div class="descartar-item">
       <h2>Resíduos Sólidos Urbanos (RSU)</h2>
@@ -199,51 +212,40 @@
     </div>
     <div class="descartar-item">
       <h2>Resíduos Orgânicos</h2>
-      <p>Podem ser descartados em composteiras ou em lixeiras específicas para resíduos orgânicos, se disponível. Isso ajuda na compostagem e na redução de resíduos enviados a aterros sanitários.</p>
+      <p>Compreendem restos de alimentos, folhas, cascas de frutas e vegetais, e outros materiais biodegradáveis.</p>
     </div>
     <div class="descartar-item">
       <h2>Resíduos Recicláveis</h2>
-      <p>Devem ser separados por tipo (papel, plástico, vidro, metal) e descartados em pontos de coleta seletiva ou centros de reciclagem.</p>
+      <p>Devem ser levados a pontos de coleta seletiva, centros de reciclagem ou ecopontos. Verifique a separação por tipo de material.</p>
     </div>
     <div class="descartar-item">
       <h2>Resíduos Perigosos</h2>
-      <p>Devem ser levados a pontos de coleta específicos, como ecopontos, para tratamento adequado. Não devem ser misturados com resíduos comuns, pois podem causar contaminação.</p>
+      <p>Leve-os a pontos de coleta específicos, como centros de tratamento de resíduos perigosos ou ecopontos. Nunca descarte em locais não apropriados.</p>
     </div>
     <div class="descartar-item">
       <h2>Resíduos Industriais</h2>
-      <p>O descarte deve seguir as regulamentações específicas para cada tipo de resíduo industrial, e geralmente é responsabilidade da empresa geradora garantir o tratamento e descarte adequado.</p>
-    </div>
-    <div class="descartar-item">
-      <h2>Resíduos de Construção e Demolição (RCD)</h2>
-      <p>Devem ser levados a áreas de triagem específicas ou aterros apropriados. Alguns materiais podem ser reciclados ou reutilizados.</p>
-    </div>
-    <div class="descartar-item">
-      <h2>Resíduos Hospitalares</h2>
-      <p>Devem ser descartados em lixeiras especiais disponíveis em estabelecimentos de saúde. Eles são encaminhados para tratamento específico, como incineração ou esterilização.</p>
-    </div>
-    <div class="descartar-item">
-      <h2>Resíduos Eletrônicos</h2>
-      <p>Devem ser levados a pontos de coleta específicos para eletrônicos, muitas vezes disponíveis em lojas de eletrônicos ou programas de reciclagem municipais.</p>
+      <p>Devem ser tratados e descartados de acordo com as normas regulatórias específicas, com suporte de empresas especializadas no gerenciamento desses resíduos.</p>
     </div>
   </div>
 
   <!-- Impactos Ambientais -->
-  <div class="section-title">Quais são os impactos Ambientais?</div>
-  
-  <div class="container">
-    <div class="impacto-item">
-      <h3>Contaminação da Água</h3>
-      <p>Resíduos líquidos podem infiltrar no solo e contaminar lençóis freáticos e rios.</p>
-    </div>
-    <div class="impacto-item">
-      <h3>Contaminação do Solo</h3>
-      <p>Produtos químicos e metais pesados podem alterar as propriedades do solo, prejudicando a vegetação e a saúde humana.</p>
-    </div>
-    <div class="impacto-item">
-      <h3>Poluição do Ar</h3>
-      <p>A queima de resíduos em lixões a céu aberto libera gases tóxicos, afetando a qualidade do ar.</p>
-    </div>
+  <div id="inpact-ambinte">
+    <div class="section-title">Impactos Ambientais</div>
   </div>
 
+  <div class="container">
+    <div class="impacto-item">
+      <h3>Contaminação do Solo</h3>
+      <p>O descarte inadequado de resíduos, como plásticos, metais e substâncias tóxicas, pode contaminar o solo, prejudicando a flora e fauna locais.</p>
+    </div>
+    <div class="impacto-item">
+      <h3>Emissões de Gases de Efeito Estufa</h3>
+      <p>Resíduos em aterros geram gases como o metano, contribuindo para o aquecimento global.</p>
+    </div>
+    <div class="impacto-item">
+      <h3>Poluição da Água</h3>
+      <p>Resíduos mal descartados podem ser levados para corpos d'água, prejudicando a qualidade da água e afetando ecossistemas aquáticos.</p>
+    </div>
+  </div>
 </body>
 </html>
