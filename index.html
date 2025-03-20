@@ -15,7 +15,7 @@
     }
 
     body {
-      background-color: #e9f7e6; /* Cor suave de fundo, lembrando a natureza */
+      background-color: #ffffff; /* Cor suave de fundo, lembrando a natureza */
       color: #3e3e3e; /* Texto em um tom neutro */
       text-align: center;
       padding: 20px;
@@ -98,11 +98,11 @@
     .quadro h2, .descartar-item h2, .impacto-item h3 {
       font-size: 1.3em;
       margin-bottom: 10px;
-      color: #fff8e1; /* Tom mais claro para destaque */
+      color: #0a0a09; /* Tom mais claro para destaque */
     }
 
     .quadro p, .descartar-item p, .impacto-item p {
-      font-size: 1em;
+      font-size: 1.2em;
       color: #f1f1f1; /* Texto mais claro para fácil leitura */
       opacity: 0;
       transition: opacity 0.3s ease-in-out;
@@ -136,6 +136,49 @@
       background-color: #dcedc8; /* Cor mais clara, para um fundo que lembre o ar livre */
       margin: 30px 0;
     }
+
+    .coleta-seletiva {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .lixeira {
+            width: 200px;
+            height: 250px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+        }
+        .azul { background-color: #2196F3; }
+        .verde { background-color: #4CAF50; }
+        .amarelo { background-color: #FFEB3B; color: black; }
+        .vermelho { background-color: #F44336; }
+        .marrom { background-color: #795548; }
+        .preto { background-color: #000000; } 
+        .cinza { background-color: #9E9E9E; }
+        .branco { background-color: #f0eaea; color: black; }
+        .roxo { background-color: #673AB7; } 
+        .descricao {
+            font-size: 14px;
+            margin-top: 5px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f1f1f1; /* Cor de fundo mais clara */
+            color: #333; /* Texto em tom neutro */ 
+              text-align: left;}
+           
+              .coleta-seletiva {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
 
   </style>
 </head>
@@ -202,7 +245,7 @@
 
   <!-- Onde descartar os resíduos -->
   <div id="onde-des-residuos">
-    <div class="section-title">Onde Descartar os Resíduos</div>
+    <div class="section-title">Onde Descartar os Resíduos?</div>
   </div>
 
   <div class="container">
@@ -247,5 +290,83 @@
       <p>Resíduos mal descartados podem ser levados para corpos d'água, prejudicando a qualidade da água e afetando ecossistemas aquáticos.</p>
     </div>
   </div>
+  
+  <br>
+  <br><br>
+  <br><br>
+  <br>
+<h1>lixeiras coloridas de coleta seletiva</h1>
+<br>
+<br>
+<div class= "coleta-seletiva">
+<h2>Qual é a funcionalidade das lixeiras coletivas?
+  </h2></div>
+<div class="coleta-seletiva">
+<h3>As lixeiras de coleta seletiva têm a função de separar os resíduos de acordo com o material, para facilitar a reciclagem e reduzir o impacto ambiental. Cada cor de lixeira
+   é associada a um tipo específico de material, ajudando a destinar corretamente os resíduos para os processos de reciclagem. Aqui está um resumo da funcionalidade de cada 
+   uma</h3>
+   <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+  <div class="lixeiras-container">
+    
+    <div class="lixeira azul">Papel
+    
+    </div>
+    <div class="descricao"><h2>Lixeira Azul (Papel): É destinada para materiais como papel, papelão, jornais, revistas e cadernos. Esses itens podem ser reciclados para criar 
+      novos produtos de papel e reduzir o impacto ambiental.
+
+    </h2>
+
+    </div>
+    <br><br>
+
+    <div class="lixeira vermelho">Plástico</div>
+    <div class="descricao"><h2> Lixeira Verde (Vidro): Deve ser usada para garrafas de vidro, potes e outros itens de vidro. O vidro é 100% reciclável e pode ser reutilizado várias vezes sem perder 
+    a qualidade.
+</h2></div>
+    <br><br>
+    <div class="lixeira verde">Vidro</div>
+    <div class="descricao"><h2> Lixeira Vermelha (Plástico): É destinada para embalagens plásticas, garrafas PET, sacolas e outros produtos de plástico. O plástico é um material que demora muito tempo para se decompor na natureza, 
+      por isso é importante reciclá-lo para reduzir a poluição ambiental.</h2></div>
+    <br>
+    <br>
+    <div class="lixeira amarelo">Metal</div>
+    <div class="descricao"><h2> Lixeira Amarela (Metal): Deve ser usada para latas de alumínio, latas de aço, panelas e outros produtos de metal. O metal é um material que pode ser reciclado várias vezes sem perder suas propriedades, 
+      economizando recursos naturais e energia.</h2></div>
+    <br>
+    <br>
+    <div class="lixeira marrom">Orgânicos</div>
+    <div class="descricao"><h2> Lixeira Marrom (Orgânicos): É destinada para restos de alimentos, cascas de frutas, legumes, folhas, entre outros resíduos orgânicos. Esses materiais podem ser compostados para gerar adubo orgânico, 
+      reduzindo a quantidade de resíduos enviados para aterros sanitários.</h2></div> 
+
+    <br>
+    <br>
+    <div class="lixeira preto">Madeira</div>
+    <div class="descricao"><h2> Lixeira Preta (Madeira): Deve ser usada para resíduos de madeira, como móveis quebrados, paletes, caixas e outros itens de madeira. A madeira pode ser reciclada ou reutilizada para criar novos produtos, 
+      evitando o desmatamento e o desperdício de recursos naturais.</h2></div>
+
+    <br>
+    <br>
+    <div class="lixeira cinza">Não recicláveis</div>
+    <div class="descricao"><h2> Lixeira Cinza (Não Recicláveis): É destinada para resíduos que não podem ser reciclados, como fraldas descartáveis, guardanapos sujos, embalagens metalizadas, entre outros materiais não recicláveis. 
+      Esses itens devem ser descartados corretamente para evitar a contaminação de materiais recicláveis e o meio ambiente.</h2></div>
+    <br>
+    <br>
+        <div class="lixeira branco">Hospitalares</div>
+        <div class="descricao"><h2> Lixeira Branca (Hospitalares): Deve ser usada para resíduos hospitalares, como seringas, agulhas, luvas, máscaras, entre outros materiais contaminados. Esses resíduos devem ser descartados em lixeiras específicas e 
+          encaminhados para tratamento adequado, visando a proteção da saúde pública e do meio ambiente.</h2></div>
+        <br>
+        <br> 
+        <div class="lixeira roxo">Perigosos</div>
+        <div class="descricao"><h2> Lixeira Roxa (Perigosos): É destinada para resíduos perigosos, como pilhas, baterias, lâmpadas fluorescentes, produtos químicos, entre outros materiais tóxicos. Esses resíduos devem ser manuseados com cuidado e 
+          descartados em locais apropriados para evitar danos à saúde e ao meio ambiente.</h2></div>  
+  </div>
+</body>
+</html>
+
 </body>
 </html>
