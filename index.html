@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReciclaFácil - Mudanças</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    
+    /* Reset de estilos para garantir consistência */
+    nav {
+      width: 100%;
+      background: #2e8b57; /* Cor verde sustentável */
+      padding: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Estilo padrão do menu */
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      background: #2e8b57;
+      border-radius: 8px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Itens do menu */
+    nav ul li {
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Ícone hamburguer para telas pequenas */
+    .menu-toggle {
+      display: none;
+      font-size: 2em;
+      color: white;
+      cursor: pointer;
+      position: absolute;
+      left: 20px;
+    }
+
+    /* Menu responsivo */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      nav ul {
+        display: none; /* Esconder menu inicialmente */
+        flex-direction: column;
+        background: #2e8b57;
+        width: 100%;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        padding: 10px 0;
+        text-align: center;
+      }
+
+      nav ul li {
+        margin: 10px 0;
+      }
+
+      nav ul.show {
+        display: flex; /* Exibir o menu quando ativado */
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #3e3e3e;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding-top: 60px; /* Espaço para a navbar fixa */
+    }
+
+    .title {
+      color: #2e8b57;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      background-color: #e9f7e6;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #34495e;
+      font-size: 24px;
+      margin-top: 20px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    /* Estilização dos quadros */
+    .quadro,
+    .descartar-item,
+    .impacto-item {
+      background: #4caf50;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+      text-align: left;
+      position: relative;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .quadro h2,
+    .descartar-item h2,
+    .impacto-item h3 {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+      color: #0a0a09;
+    }
+
+    .quadro p,
+    .descartar-item p,
+    .impacto-item p {
+      font-size: 1.1em;
+      color: #f1f1f1;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+    }
+
+    .quadro:hover p,
+    .descartar-item:hover p,
+    .impacto-item:hover p {
+      opacity: 1;
+    }
+
+    .quadro:hover,
+    .descartar-item:hover,
+    .impacto-item:hover {
+      transform: scale(1.05);
+    }
+
+    .section-title {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #2d6a4f;
+    }
+
+    /* Mapa interativo */
+    .map-container {
+      width: 100%;
+      height: 500px;
+      background-color: #dcedc8;
+      margin: 30px 0;
+      border-radius: 8px;
+    }
+
+    /* Estilização das lixeiras e demais seções estão mantidas... */
+    /* ... (Seu CSS continua conforme enviado) */
+
+    /* Aplicativos Recomendados, Cards, etc. */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #e8f0fe;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #2e7d32;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .card:last-child ul {
+      padding-left: 0;
+    }
+
+    /* Estilo da seção de comentário */
+.seucomet {
+  font-size: 22px;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Estilização geral do formulário */
+.form-comentario {
+  max-width: 600px;
+  padding: 15px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Campos de entrada */
+.form-comentario input[type="text"],
+.form-comentario input[type="email"],
+.form-comentario textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Área do comentário */
+.comment {
+  height: 100px;
+  resize: vertical;
+  transition: width 0.6s;
+}
+
+/* Botão de envio */
+.submit-button {
+  padding: 10px 20px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+  background: #0b7dda;
+}
+
+/* Botão flutuante ou adicional (opcional) */
+.button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  border-radius: 4px;
+  padding: 10px 15px;
+  color: #ffffff;
+  background-color: #060d0e;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.4s;
+}
+
+.button:hover {
+  background-color: #414141;
+}
+
+
+  
+  </style>
+</head>
+<body>
+  <section style="
+  background-color: #f0fdf4;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  color: #256029;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  max-width: 800px;
+  margin: auto;
+">
+  <h1 style="font-size: 28px; margin-bottom: 15px;">
+    <strong>Transforme o Descarte em Ação Consciente:</strong> Encontre Seu EcoPonto Ideal
+  </h1>
+  <p style="font-size: 17px; color: #2e7d32;">
+    Com os EcoPontos, você encontra o lugar certo para cada tipo de resíduo — fácil, rápido e com responsabilidade ambiental.
+  </p>
+</section>
+  <!-- Barra de navegação fixa -->
+  <nav>
+    <ul>
+      <li><a href="mudanças.html">Início</a></li>
+      <li><a href="#tipos-de-residuos">Tipos de Resíduos</a></li>
+      <li><a href="#onde-des-residuos">Impactos Ambientais</a></li>
+      <li><a href="#Dicas e Informações">Dicas e Informações</a></li>
+      <li><a href="sobre.html">sobre</a></li>
+    </ul>
+  </nav>
+
+  <!-- Mapa interativo - posicionado logo abaixo da barra de navegação -->
+   <div id="map-container">
+    <h2>Mapa de Ecopontos</h2>
+    <p>Encontre os locais de descarte correto de resíduos na sua região.</p>
+  <div id="map" class="map-container"></div>
+
+  <br><br>
+
+  <!-- Restante das seções do site (Tipos de Resíduos, Impactos, Lixeiras, Dicas, etc.) -->
+  <div id="tipos-de-residuos">
+    <div class="section-title">Tipos de Resíduos</div>
+  </div>
+
+  <div class="container">
+    <div class="quadro">
+      <h2>Resíduos Sólidos Urbanos (RSU)</h2>
+      <p>Incluem resíduos domésticos e comerciais, como restos de alimentos, embalagens, papel, plástico, vidro, metal, etc.</p>
+    </div>
+    <div class="quadro">
+      <h2>Resíduos Orgânicos</h2>
+      <p>Compreendem restos de alimentos, folhas, cascas de frutas e vegetais e outros materiais biodegradáveis.</p>
+    </div>
+    <div class="quadro">
+      <h2>Resíduos Recicláveis</h2>
+      <p>Devem ser separados por tipo (papel, plástico, vidro, metal) e descartados em pontos de coleta seletiva ou centros de reciclagem.</p>
+    </div>
+    <div class="quadro">
+      <h2>Resíduos Perigosos</h2>
+      <p>Devem ser levados a pontos de coleta específicos, como ecopontos, para tratamento adequado. Não devem ser misturados com resíduos comuns, pois podem causar contaminação.</p>
+    </div>
+    <div class="quadro">
+      <h2>Resíduos Industriais</h2>
+      <p>O descarte deve seguir as regulamentações específicas para cada tipo de resíduo industrial, e geralmente é responsabilidade da empresa geradora garantir o tratamento e descarte adequado.</p>
+    </div>
+    <div class="quadro">
+      <h2>Resíduos de Construção e Demolição (RCD)</h2>
+      <p>Devem ser levados a áreas de triagem específicas ou aterros apropriados. Alguns materiais podem ser reciclados ou reutilizados.</p>
+    </div>
+    <div class="quadro">
+      <h2>Resíduos Hospitalares</h2>
+      <p>Devem ser descartados em lixeiras especiais disponíveis em estabelecimentos de saúde. Eles são encaminhados para tratamento específico, como incineração ou esterilização.</p>
+    </div>
+    <div class="quadro">
+      <h2>Resíduos Eletrônicos</h2>
+      <p>Devem ser levados a pontos de coleta específicos para eletrônicos, muitas vezes disponíveis em lojas de eletrônicos ou programas de reciclagem municipais.</p>
+    </div>
+  </div>
+
+  <!-- Onde descartar os resíduos -->
+  <div id="onde-des-residuos">
+    <div class="section-title">Onde Descartar os Resíduos?</div>
+  </div>
+
+  <div class="container">
+    <div class="descartar-item">
+      <h2>Resíduos Sólidos Urbanos (RSU)</h2>
+      <p>Podem ser descartados em lixeiras comuns, de preferência separando resíduos recicláveis dos não recicláveis.</p>
+    </div>
+    <div class="descartar-item">
+      <h2>Resíduos Orgânicos</h2>
+      <p>Compreendem restos de alimentos, folhas, cascas de frutas e vegetais, e outros materiais biodegradáveis.</p>
+    </div>
+    <div class="descartar-item">
+      <h2>Resíduos Recicláveis</h2>
+      <p>Devem ser levados a pontos de coleta seletiva, centros de reciclagem ou ecopontos. Verifique a separação por tipo de material.</p>
+    </div>
+    <div class="descartar-item">
+      <h2>Resíduos Perigosos</h2>
+      <p>Leve-os a pontos de coleta específicos, como centros de tratamento de resíduos perigosos ou ecopontos. Nunca descarte em locais não apropriados.</p>
+    </div>
+    <div class="descartar-item">
+      <h2>Resíduos Industriais</h2>
+      <p>Devem ser tratados e descartados de acordo com as normas regulatórias específicas, com suporte de empresas especializadas no gerenciamento desses resíduos.</p>
+    </div>
+  </div>
+
+  <!-- Impactos Ambientais -->
+  <div id="inpact-ambinte">
+    <div class="section-title">Impactos Ambientais</div>
+  </div>
+
+  <div class="container">
+    <div class="impacto-item">
+      <h3>Contaminação do Solo</h3>
+      <p>O descarte inadequado de resíduos, como plásticos, metais e substâncias tóxicas, pode contaminar o solo, prejudicando a flora e fauna locais.</p>
+    </div>
+    <div class="impacto-item">
+      <h3>Emissões de Gases de Efeito Estufa</h3>
+      <p>Resíduos em aterros geram gases como o metano, contribuindo para o aquecimento global.</p>
+    </div>
+    <div class="impacto-item">
+      <h3>Poluição da Água</h3>
+      <p>Resíduos mal descartados podem ser levados para corpos d'água, prejudicando a qualidade da água e afetando ecossistemas aquáticos.</p>
+    </div>
+  </div>
+
+  <!-- Lixeiras coloridas e demais seções... -->
+  <h1>lixeiras coloridas de coleta seletiva</h1>
+  <div class="coleta-seletiva">
+    <h2>Qual é a funcionalidade das lixeiras coletivas?</h2>
+  </div>
+  <div class="coleta-seletiva">
+    <h3>As lixeiras de coleta seletiva separam os resíduos de acordo com o material, facilitando a reciclagem e reduzindo o impacto ambiental.</h3>
+    <br><br>
+    <div class="lixeiras-container">
+      <div class="lixeira azul">
+        <img src="img/azul.jpg" alt="Papel" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Azul (Papel): Destinada a papel, papelão, jornais, revistas e cadernos.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira vermelho">
+        <img src="img/vermelho.jpg" alt="Plástico" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Vermelha (Plástico): Destinada a embalagens plásticas, garrafas PET, sacolas e outros produtos de plástico.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira verde">
+        <img src="img/verde.jpg" alt="Vidro" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Verde (Vidro): Para garrafas, potes e outros produtos de vidro, que podem ser reciclados infinitamente.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira amarelo">
+        <img src="img/amarelo.jpg" alt="Metal" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Amarela (Metal): Destinada a latas de alumínio, aço, panelas e outros produtos de metal.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira marrom">
+        <img src="img/marron2.jpg" alt="Orgânicos" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Marrom (Orgânicos): Para restos de alimentos, cascas, legumes, folhas, etc., que podem ser compostados.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira preto">
+        <img src="img/preto.jpg" alt="Madeira" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Preta (Madeira): Destinada a resíduos de madeira, como móveis quebrados, paletes e caixas.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira cinza">
+        <img src="img/cinza.jpg" alt="Não recicláveis" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Cinza (Não Recicláveis): Para itens que não podem ser reciclados, como fraldas descartáveis, guardanapos, etc.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira branco">
+        <img src="img/branco.jpg" alt="Hospitalares" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Branca (Hospitalares): Para resíduos hospitalares, como seringas, agulhas, luvas e máscaras.</h2>
+      </div>
+      <br><br>
+      <div class="lixeira roxo">
+        <img src="img/roxo.jpg" alt="Perigsos" width="200" height="200">
+      </div>
+      <div class="descricao">
+        <h2>Lixeira Roxa (Perigosos): Destinada a resíduos perigosos, como pilhas, baterias, lâmpadas fluorescentes, etc.</h2>
+      </div>
+    </div>
+  </div>
+
+  <br><br>
+
+  <!-- Dicas e Informações -->
+  <div id="Dicas e Informações">
+    <p><strong>Integração de Tecnologia na Gestão de Resíduos: Soluções Digitais para Sustentabilidade</strong><br>
+    No contexto do nosso projeto de extensão voltado para a educação ambiental e a promoção da sustentabilidade, a utilização de aplicativos e sistemas para a gestão de resíduos tem se mostrado uma estratégia eficaz para engajar a comunidade e promover ações de reciclagem e descarte adequado. Essas soluções digitais não apenas facilitam a logística do processo de reciclagem, mas também ajudam a conscientizar sobre o consumo responsável.</p>
+    <br>
+    <h2>♻️ Dicas e Informações</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>♻️ Dicas para reciclar melhor</h3>
+        <ul>
+          <li>Lave as embalagens antes de descartar.</li>
+          <li>Evite misturar lixo orgânico com recicláveis.</li>
+          <li>Remova grampos e fitas dos papéis.</li>
+          <li>Prefira embalagens recicláveis ou reutilizáveis.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🗑️ Curiosidades sobre reciclagem</h3>
+        <ul>
+          <li>Uma lata de alumínio pode ser reciclada infinitas vezes.</li>
+          <li>Plásticos podem levar até 400 anos para se decompor.</li>
+          <li>O Brasil recicla cerca de 98% das latas de alumínio.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>✅ Itens que parecem recicláveis</h3>
+        <ul>
+          <li>Papel engordurado (ex: caixa de pizza).</li>
+          <li>Espelhos e vidros de janelas.</li>
+          <li>Isopor (varia por região).</li>
+          <li>Copos plásticos com cera ou alumínio.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>💡 Ideias de reaproveitamento</h3>
+        <ul>
+          <li>Potes de vidro → porta-temperos.</li>
+          <li>Caixas de papelão → organizadores.</li>
+          <li>Garrafas PET → vasos ou luminárias.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📱 Links úteis / apps</h3>
+        <ul>
+          <li><a href="https://www.cataki.org/" target="_blank">Baixar o app Cataki</a></li>
+          <li><a href="https://ecycle.com.br" target="_blank">Site do eCycle</a></li>
+          <li><em>Verifique pontos de coleta na sua cidade.</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="dicas e informações">
+    <h2>🌱 Educação Ambiental para Crianças</h2>
+    <p>Ensinar sustentabilidade desde cedo é essencial para formar cidadãos conscientes e responsáveis. A seguir, listamos alguns aplicativos educativos para crianças.</p>
+    <br>
+    <h3>Aplicativos Recomendados</h3>
+    <div class="cards">
+      <div class="card">
+        <h3>🐢 Toca Nature</h3>
+        <ul>
+          <li>Permite construir mundos naturais com florestas e animais.</li>
+          <li>Ajuda a entender o equilíbrio ecológico.</li>
+          <li>Visual lúdico e educativo (4 a 8 anos).</li>
+          <li><strong>Disponível para:</strong> iOS e Android</li>
+        </ul>
+        <br>
+      </div>
+      <div class="card">
+        <h3>🌍 Planeta Limpo</h3>
+        <ul>
+          <li>App brasileiro com jogos sobre reciclagem.</li>
+          <li>Ensina como separar o lixo corretamente.</li>
+          <li>Aborda a importância de cuidar do planeta.</li>
+          <li><strong>Disponível para:</strong> Android</li>
+        </ul>
+        <br>
+      
+      </div>
+      <div class="card">
+        <h3>♻️ Recicla Kids</h3>
+        <ul>
+          <li>Ensina separação de lixo reciclável com jogos e dinâmicas.</li>
+          <li>Ideal para uso em casa ou escola.</li>
+          <li><strong>Disponível para:</strong> Android</li>
+        </ul>
+        <br>
+       
+      </div>
+      <div class="card">
+        <h3>🧠 Jogo da Memória Ambiental</h3>
+        <ul>
+          <li>Jogo da memória com temas ambientais.</li>
+          <li>Ajuda a fixar conceitos de forma divertida.</li>
+          <li><strong>Disponível para:</strong> Android</li>
+        </ul>
+        <br>
+        
+      </div>
+      <div class="card">
+        <h3>🦜 Bichos da Mata</h3>
+        <ul>
+          <li>Ensina sobre a fauna brasileira e respeito à biodiversidade.</li>
+          <li>Produzido por iniciativa ambiental nacional.</li>
+          <li><strong>Disponível para:</strong> Android e iOS</li>
+        </ul>
+        <br>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Script do Mapa Interativo com Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Inicializa o mapa na div com id "map"
+    const map = L.map('map').setView([-15.77972, -47.92972], 15); // Centro do Brasil
+
+   
+
+    // Adiciona os tiles do OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap colaboradores'
+    }).addTo(map);
+
+    // Array de pontos de coleta (exemplos; adapte com os seus dados completos)
+    const pontos = 
+    [
+  // Bahia (BA)
+  {
+    estado: "BA",
+    nome: "Ecoponto Salvador Centro",
+    lat: -12.9822,
+    lng: -38.5160,
+    endereco: "Av. Sete de Setembro, 1234 - Salvador, BA",
+    numero: "1234",
+    descricao: "Recebe plástico, vidro, papel, papelão e pequenos eletrodomésticos."
+  },
+  {
+    estado: "BA",
+    nome: "Ecoponto Itapuã",
+    lat: -12.9500,
+    lng: -38.5000,
+    endereco: "Rua da Alegria, 567 - Salvador, BA",
+    numero: "567",
+    descricao: "Aceita resíduos de madeira, móveis desmontados e restos de construção civil."
+  },
+
+  // Maranhão (MA)
+  {
+    estado: "MA",
+    nome: "Ecoponto São Luís Centro",
+    lat: -2.5387,
+    lng: -44.2825,
+    endereco: "Rua Grande, 456 - São Luís, MA",
+    numero: "456",
+    descricao: "Recebe resíduos de papel, papelão, plásticos e metais."
+  },
+  {
+    estado: "MA",
+    nome: "Ecoponto Anil",
+    lat: -2.5504,
+    lng: -44.2225,
+    endereco: "Av. Principal, 789 - São Luís, MA",
+    numero: "789",
+    descricao: "Aceita móveis desmontados, resíduos de madeira e materiais recicláveis."
+  },
+
+  // São Paulo (SP)
+  {
+    estado: "SP",
+    nome: "Ecoponto Jaraguá",
+    lat: -23.4685,
+    lng: -46.7590,
+    endereco: "Av. atílio Brugnori, 484 jaraguá, São paulo Sp",
+    numero: "484",
+    descricao: "Aceita papel, papelão, plástico, vidros, espelhos, metais, isopor, madeira, vegetação, pneus, óleo de cozinha e móveis desmontados."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Zaki Narchi",
+    lat: -23.5120,
+    lng: -46.6240,
+    endereco: "Av. Zaki Narchi, 360, São Paulo - SP",
+    numero: "360",
+    descricao: "Aceita papel, plástico, vidro, metais e móveis desmontados."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Barro Branco",
+    lat: -23.4680,
+    lng: -46.6090,
+    endereco: "Rua Eduardo Vicente Nasser, 519 - Barro Branco, São Paulo - SP",
+    numero: "519",
+    descricao: "Ponto estratégico para reciclagem de resíduos sólidos domésticos."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Mauricio Francisco Klabin",
+    lat: -23.5925,
+    lng: -46.6350,
+    endereco: "Mauricio Francisco Klabin, 37, São Paulo - SP",
+    numero: "37",
+    descricao: "Oferece serviços de coleta de resíduos sólidos."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Tatuapé",
+    lat: -23.5640,
+    lng: -46.5610,
+    endereco: "Av. Salim Farah Maluf, 179 - Tatuapé, São Paulo - SP",
+    numero: "179",
+    descricao: "Local com capacidade para resíduos recicláveis e volumosos."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Dr. Heládio",
+    lat: -23.5313,
+    lng: -46.5255,
+    endereco: "Rua Dr. Heládio, 104, São Paulo - SP",
+    numero: "104",
+    descricao: "Atende a região para descartes de materiais domésticos recicláveis."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Pires do Rio",
+    lat: -23.5500,
+    lng: -46.6000,
+    endereco: "Av. Pires do Rio X Rua Bresser, São Paulo - SP",
+    descricao: "Recebe grande variedade de resíduos recicláveis e volumosos."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Cancioneiro",
+    lat: -23.6150,
+    lng: -46.4310,
+    endereco: "Pça. do Cancioneiro, nº 15, São Paulo - SP",
+    numero: "15",
+    descricao: "Ecoponto bem localizado, atendendo a demandas de recicláveis."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Jardim Bela Vista (Guarulhos)",
+    lat: -23.4229,
+    lng: -46.5437,
+    endereco: "Rua Cabrália, 100 – Jardim Bela Vista, Guarulhos - SP",
+    numero: "100",
+    descricao: "Funciona todos os dias e aceita materiais recicláveis e volumosos."
+  },
+  {
+    estado: "SP",
+    nome: "Ecoponto Mikail",
+    lat: -23.4090,
+    lng: -46.4943,
+    endereco: "Rua Justiniano Salvador dos Santos, 269 – Parque Mikail, Guarulhos - SP",
+    numero: "269",
+    descricao: "Disponível de segunda a sábado para descartes sustentáveis."
+  },
+ // Rio de Janeiro (RJ) – novos pontos
+ {
+    estado: "RJ",
+    nome: "Ecoponto Jardim Gramacho",
+    lat: -22.8033,
+    lng: -43.3306,
+    endereco: "Estrada do Dendê, 2000 - Jardim Gramacho, Duque de Caxias - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto Campo Grande",
+    lat: -22.9083,
+    lng: -43.6102,
+    endereco: "Rua João Vicente, 1000 - Campo Grande, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto Santa Cruz",
+    lat: -22.9256,
+    lng: -43.6461,
+    endereco: "Rua Domingos Lopes, 200 - Santa Cruz, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto Tijuca",
+    lat: -22.9111,
+    lng: -43.2275,
+    endereco: "Rua Barão de Mesquita, 1000 - Tijuca, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto São Cristóvão",
+    lat: -22.9083,
+    lng: -43.2242,
+    endereco: "Rua São Cristóvão, 1000 - São Cristóvão, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto Lapa",
+    lat: -22.9111,
+    lng: -43.1944,
+    endereco: "Rua da Lapa, 1000 - Lapa, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto Botafogo",
+    lat: -22.9627,
+    lng: -43.1861,
+    endereco: "Rua São João Batista, 45 - Botafogo, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto Ipanema",
+    lat: -22.9833,
+    lng: -43.2075,
+    endereco: "Rua Visconde de Pirajá, 1000 - Ipanema, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  {
+    estado: "RJ",
+    nome: "Ecoponto Copacabana",
+    lat: -22.9711,
+    lng: -43.1852,
+    endereco: "Rua Domingos Ferreira, 200 - Copacabana, Rio de Janeiro - RJ",
+    descricao: "Aceita papel, plástico, vidro e metais."
+  },
+  // Ceará (CE)
+  {
+    estado: "CE",
+    nome: "Ecoponto Washington Soares",
+    lat: -3.7890,
+    lng: -38.4880,
+    endereco: "Av. Washington Soares, 1000 - Fortaleza, CE",
+    numero: "1000",
+    descricao: "Aceita resíduos eletrônicos, papéis e plásticos."
+  },
+  {
+    estado: "CE",
+    nome: "Ecoponto Parangaba",
+    lat: -3.7642,
+    lng: -38.5296,
+    endereco: "Rua do Futuro, 890 - Parangaba, Fortaleza, CE",
+    numero: "890",
+    descricao: "Especializado em descarte de plástico, metal e eletrônicos."
+  },
+
+  // Distrito Federal (DF)
+  {
+    estado: "DF",
+    nome: "Ecoponto Asa Sul",
+    lat: -15.7934,
+    lng: -47.8823,
+    endereco: "SQS 304 - Brasília, DF",
+    descricao: "Aceita papel, plástico, vidro e pequenos aparelhos eletrônicos."
+  },
+  {
+    estado: "DF",
+    nome: "Ecoponto Taguatinga Norte",
+    lat: -15.8190,
+    lng: -48.0687,
+    endereco: "QS 05 - Taguatinga, Brasília, DF",
+    descricao: "Aceita resíduos domésticos recicláveis, como papelão, metais e vidros."
+  }
+]
+      // Adiciona marcadores para cada ponto de coleta
+      pontos.forEach(ponto => {
+        L.marker([ponto.lat, ponto.lng]).addTo(map)
+          .bindPopup(`<strong>${ponto.nome}</strong><br>${ponto.endereco}<br>${ponto.descricao}`)
+          .openPopup();
+         
+      });
+   
+ 
+   // Adiciona um evento de clique para fechar o menu ao clicar fora dele  
+
+  </script>
+
+  <!-- Fim do conteúdo da página -->
+
+  <!-- Comentários -->
+   <br>
+  <br>
+<div class="seucomet">
+  <p>Deixe seu comentário sobre o ReciclaFácil:</p>
+</div>
+
+<section style="
+  background-color: #f9fbe7;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  color: #33691e;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  max-width: 700px;
+  margin: 40px auto;
+">
+  <h2 style="margin-bottom: 10px;">📩 Envie sua Avaliação por E-mail</h2>
+  <p style="font-size: 16px; margin-bottom: 10px;">
+    Para contribuir com o projeto, envie sua avaliação diretamente para:
+  </p>
+  <p style="font-size: 18px; font-weight: bold; color: #1b5e20;">
+    <a href="mailto:faculdadeprojetos9@gmail.com" style="color: #1b5e20; text-decoration: underline;">
+      faculdadeprojetos9@gmail.com
+    </a>
+  </p>
+  <p style="font-size: 15px; margin-top: 10px;">
+    Agradecemos seu tempo e apoio ao <strong>ReciclaFácil</strong>!
+  </p>
+</section>
+
+
+
+<footer style="
+background: #e8f5e9;
+color: #2e7d32;
+padding: 30px 20px;
+text-align: center;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+font-size: 15px;
+border-top: 2px solid #a5d6a7;
+box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+">
+  
+<h2 style="margin: 0; font-size: 20px; font-weight: 600;">ReciclaFácil</h2>
+<p style="margin: 5px 0;">Projeto de Extensão | Matheus Pedroso Teixeira</p>
+<p style="margin: 5px 0;">
+  📧 <a href="mailto:faculdadeprojetos9@gmail.com" style="color: #2e7d32; text-decoration: underline;">faculdadeprojetos9@gmail.com</a> |
+  🌐 <a href="https://github.com/matheuspedroso851" target="_blank" style="color: #2e7d32; text-decoration: underline;">GitHub</a>
+</p>
+<p style="margin-top: 10px; font-style: italic;">♻️ Pequenas ações, grandes mudanças para o futuro do planeta.</p>
+</footer>              
+                             
+  
+  
+  <br>
+</body>
+</html>
